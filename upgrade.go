@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 )
 
@@ -25,7 +26,13 @@ func InitDownloaded() {
 }
 
 func download(url string, location string, name string) {
-	out, err := os.Create(location + name + TmpPostfix)
+	if _, err := os.Stat(location + name + TmpPostfix); err == nil {
+		err = os.Remove(location + name + TmpPostfix)
+		if err != nil {
+			log.Fatalf("Failed to remove previos %s binary : %s", TmpPostfix, err.Error())
+		}
+	}
+	out, err := os.OpenFile(location+name+TmpPostfix, os.O_CREATE|os.O_WRONLY, 0777)
 	if err != nil {
 		log.Fatalf("Failed to write new binary on disk: %s", err.Error())
 	}
@@ -43,6 +50,11 @@ func download(url string, location string, name string) {
 }
 
 func runNew(location string, name string) {
+	if runtime.GOOS != "Windows" {
+		if location == "" {
+			location = "./"
+		}
+	}
 	cmd := exec.Command(location+name+TmpPostfix, "-downloaded=true")
 	err := cmd.Run()
 	if err != nil {
