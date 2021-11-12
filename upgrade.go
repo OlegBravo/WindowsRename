@@ -16,12 +16,12 @@ const (
 
 func Upgrade(url string, location string, name string) {
 	download(url, location, name)
-	runNew(location, name)
+	startCliInit(location, name)
 	os.Exit(0)
 }
 
 func InitDownloaded() {
-	renameMyBinary()
+	renameCurrentBinary()
 	os.Exit(0)
 }
 
@@ -49,7 +49,7 @@ func download(url string, location string, name string) {
 	}
 }
 
-func runNew(location string, name string) {
+func startCliInit(location string, name string) {
 	if runtime.GOOS != "Windows" {
 		if location == "" {
 			location = "./"
@@ -63,7 +63,7 @@ func runNew(location string, name string) {
 }
 
 //remove postfix from the name of executing binary
-func renameMyBinary() {
+func renameCurrentBinary() {
 	executable, err := os.Executable()
 	if err != nil {
 		log.Fatalf("failed to get executable : %s \n", err.Error())
