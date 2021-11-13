@@ -68,9 +68,13 @@ func renameCurrentBinary() {
 	if err != nil {
 		log.Fatalf("failed to get executable : %s \n", err.Error())
 	}
-	execPath := strings.SplitAfter(executable, "\\")
+	separator := "/"
+	if runtime.GOOS == "windows" {
+		separator = "\\"
+	}
+	execPath := strings.SplitAfter(executable, separator)
 	execFile := execPath[len(execPath)-1]
-	execDir := strings.Join(execPath[:len(execPath)-1], "\\")
+	execDir := strings.Join(execPath[:len(execPath)-1], "")
 	log.Println("Trying to rename myself")
 	err = os.Rename(execDir+execFile, execDir+execFile[0:len(execFile)-len(TmpPostfix)])
 	if err != nil {
