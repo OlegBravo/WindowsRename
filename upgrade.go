@@ -32,7 +32,7 @@ func download(url string, location string, name string) {
 			log.Fatalf("Failed to remove previos %s binary : %s", TmpPostfix, err.Error())
 		}
 	}
-	out, err := os.OpenFile(location+name+TmpPostfix, os.O_CREATE|os.O_WRONLY, 0777)
+	out, err := os.OpenFile(location+name+TmpPostfix, os.O_CREATE|os.O_WRONLY, 0700)
 	if err != nil {
 		log.Fatalf("Failed to write new binary on disk: %s", err.Error())
 	}

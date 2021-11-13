@@ -26,9 +26,13 @@ func main() {
 
 	c := readArguments(os.Args)
 
+	separator := "/"
+	if runtime.GOOS == "windows" {
+		separator = "\\"
+	}
 	executable, _ := os.Executable()
-	execPath := strings.SplitAfter(executable, "\\")
-	execDir := strings.Join(execPath[:len(execPath)-1], "\\")
+	execPath := strings.SplitAfter(executable, separator)
+	execDir := strings.Join(execPath[:len(execPath)-1], "")
 	println(execDir)
 
 	if c.IsDownloaded {
